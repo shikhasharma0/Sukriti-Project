@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+// frontend/src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
+import { useSelector } from 'react-redux';
 
-function App() {
+const App = () => {
+  const token = useSelector(state => state.auth.token);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={!token ? <Login /> : <Navigate to="/home" />} />
+        <Route path="/register" element={!token ? <Register /> : <Navigate to="/home" />} />
+        <Route path="/home" element={token ? <Home /> : <Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
